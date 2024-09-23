@@ -17,8 +17,32 @@ def _eigh(A):
     return np.linalg.eigh(A)
 
 
+# def _compute_r_term(m, k, ns, Q, brt, lam, ffm, nr, ffp, psi, psir):
+#     for l in range(ns):
+#         # Ignore the l=0 and m=0 term; for a globally divergence free field
+#         # this term is zero anyway, but numerically it may be small which
+#         # causes numerical issues when solving for c, d
+#         if l == 0 and m == 0:
+#             continue
+#         # - sum (c_{lm} + d_{lm}) * lam_{l}
+#         # lam[l] is small so this blows up
+#         cdlm = np.dot(Q[:, l], np.asfortranarray(brt[:, m])) / lam[l]
+#         # - ratio c_{lm}/d_{lm} [numerically safer this way up]
+#         ratio = (ffm[l]**(nr - 1) - ffm[l]**nr) / (ffp[l]**nr - ffp[l]**(nr - 1))
+#         dlm = cdlm / (1.0 + ratio)
+#         clm = ratio * dlm
+#         psir[:, l] = clm * ffp[l]**k + dlm * ffm[l]**k
+#
+#     # - compute entry for this m in psit = Sum_l c_{lm}Q_{lm}**j
+#     psi[:, :, m] = np.dot(psir, Q.T)
+#     return psi, psir
+
 def _compute_r_term(m, k, ns, Q, brt, lam, ffm, nr, ffp, psi, psir):
-    for l in range(ns):
+    # for l in range(ns):
+    # print('ns:', ns)
+    print("m:", m)
+
+    for l in [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]:
         # Ignore the l=0 and m=0 term; for a globally divergence free field
         # this term is zero anyway, but numerically it may be small which
         # causes numerical issues when solving for c, d
@@ -131,7 +155,7 @@ def pfss(input):
     fact = np.sinh(dr) * (e1 - 1)
 
     # Loop over azimuthal modes (positive m):
-    for m in range(nphi // 2 + 1):
+    for m in range(10):  # range(nphi // 2 + 1):
         # - set diagonal terms of matrix:
         A = _A_diag(A, ns, Vg, Uc, mu, m)
 
